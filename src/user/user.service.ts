@@ -42,4 +42,10 @@ export class UserService {
       throw new UserNotCreatedException(payload.email)
     }
   }
+
+  async remove(id: number): Promise<number> {
+    const entity = await this.getById(id)
+    await this.userRepository.remove(entity)
+    return id
+  }
 }
