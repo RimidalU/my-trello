@@ -1,16 +1,38 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common'
 
 import { UserService } from '@src/user/user.service'
 
 import { ApiTags } from '@nestjs/swagger'
 import { UserEntity } from './entities'
-import { UserItemDto, UserResponseDto, UsersResponseDto } from './dto'
+import {
+  CreateUserDto,
+  UserConfirmationResponseDto,
+  UserItemDto,
+  UserResponseDto,
+  UsersResponseDto,
+} from './dto'
 import { GetAllSwaggerDecorator, GetByIdSwaggerDecorator } from './decorators'
 
 @Controller('user')
 @ApiTags('User routes')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Post()
+  async create(
+    @Body() payload: CreateUserDto,
+  ): Promise<UserConfirmationResponseDto> {
+    const userId = await this.userService.create(payload)
+
+    return this.buildUserConfirmationResponse(userId)
+  }
 
   @Get()
   @GetAllSwaggerDecorator()
@@ -19,6 +41,18 @@ export class UserController {
 
     return {
       users: users.map((user) => this.buildUserResponse(user)),
+    }
+  }
+
+  @Get(':id')
+  @GetByIdSwaggerDecorator()
+  async getById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<UserResponseDto> {
+    const userInfo = await this.userService.getById(id)
+
+    return {
+      user: this.buildUserResponse(userInfo),
     }
   }
 
@@ -32,15 +66,13 @@ export class UserController {
     }
   }
 
-  @Get(':id')
-  @GetByIdSwaggerDecorator()
-  async getById(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<UserResponseDto> {
-    const userInfo = await this.userService.getById(id)
-
+  private buildUserConfirmationResponse(
+    userId: number,
+  ): UserConfirmationResponseDto {
     return {
-      user: this.buildUserResponse(userInfo),
+      user: {
+        itemId: userId,
+      },
     }
   }
 }
