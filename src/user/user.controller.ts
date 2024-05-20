@@ -1,11 +1,11 @@
-import { Controller, Get } from '@nestjs/common'
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common'
 
 import { UserService } from '@src/user/user.service'
 
 import { ApiTags } from '@nestjs/swagger'
 import { UserEntity } from './entities'
-import { UserItemDto, UsersResponseDto } from './dto'
-import { GetAllSwaggerDecorator } from './decorators'
+import { UserItemDto, UserResponseDto, UsersResponseDto } from './dto'
+import { GetAllSwaggerDecorator, GetByIdSwaggerDecorator } from './decorators'
 
 @Controller('user')
 @ApiTags('User routes')
@@ -29,6 +29,18 @@ export class UserController {
         name: user.name,
         email: user.email,
       },
+    }
+  }
+
+  @Get(':id')
+  @GetByIdSwaggerDecorator()
+  async getById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<UserResponseDto> {
+    const userInfo = await this.userService.getById(id)
+
+    return {
+      user: this.buildUserResponse(userInfo),
     }
   }
 }
