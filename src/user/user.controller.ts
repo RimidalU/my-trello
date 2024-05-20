@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  NotAcceptableException,
   Param,
   ParseIntPipe,
   Post,
@@ -22,6 +24,8 @@ import {
   CreateSwaggerDecorator,
   GetAllSwaggerDecorator,
   GetByIdSwaggerDecorator,
+  RemoveSwaggerDecorator,
+  UserInfo,
 } from './decorators'
 
 @Controller('user')
@@ -59,6 +63,21 @@ export class UserController {
     return {
       user: this.buildUserResponse(userInfo),
     }
+  }
+
+  @Delete(':id')
+  @RemoveSwaggerDecorator()
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @UserInfo('id') currentUserId: number,
+  ): Promise<UserConfirmationResponseDto> {
+    if (id !== currentUserId) {
+      throw new NotAcceptableException()
+    }
+
+    const userId = await this.userService.remove(id)
+
+    return this.buildUserConfirmationResponse(userId)
   }
 
   private buildUserResponse(user: UserEntity): UserItemDto {
