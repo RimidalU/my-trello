@@ -21,4 +21,12 @@ export class UserService {
     }
     return user
   }
+
+  async getByEmail(email: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOneBy({ email })
+    if (!user) {
+      throw new UserNotFoundException({ email })
+    }
+    return user
+  }
 }
