@@ -1,3 +1,5 @@
 export * from './user-response.dto'
 export * from './user-item.dto'
 export * from './users-response.dto'
+export * from './create-user.dto'
+export * from './user-confirmation-response.dto'
