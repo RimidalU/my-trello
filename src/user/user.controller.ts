@@ -7,6 +7,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common'
 
 import { UserService } from '@src/user/user.service'
@@ -27,6 +28,7 @@ import {
   RemoveSwaggerDecorator,
   UserInfo,
 } from './decorators'
+import { JwtAuthGuard } from '@src/auth/strategies/jwt-auth.guard'
 
 @Controller('user')
 @ApiTags('User routes')
@@ -43,6 +45,7 @@ export class UserController {
     return this.buildUserConfirmationResponse(userId)
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   @GetAllSwaggerDecorator()
   async getAll(): Promise<UsersResponseDto> {
@@ -53,6 +56,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @GetByIdSwaggerDecorator()
   async getById(
@@ -65,6 +69,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @RemoveSwaggerDecorator()
   async remove(
