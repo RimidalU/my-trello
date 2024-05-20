@@ -1,8 +1,11 @@
 import { Controller, Get } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+
 import { UserService } from '@src/user/user.service'
+
+import { ApiTags } from '@nestjs/swagger'
 import { UserEntity } from './entities'
 import { UserItemDto, UsersResponseDto } from './dto'
+import { GetAllSwaggerDecorator } from './decorators'
 
 @Controller('user')
 @ApiTags('User routes')
@@ -10,6 +13,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @GetAllSwaggerDecorator()
   async getAll(): Promise<UsersResponseDto> {
     const users = await this.userService.getAll()
 
