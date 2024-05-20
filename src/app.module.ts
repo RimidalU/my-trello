@@ -7,12 +7,14 @@ import { UserModule } from './user/user.module'
 
 import { getConfigModuleConfig } from './configs'
 import { EnvModule } from './env/env.module'
+import { DatabaseModule } from './database/database.module'
 
 @Module({
   imports: [
     ConfigModule.forRoot(getConfigModuleConfig()),
     UserModule,
     EnvModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
