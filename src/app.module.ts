@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 
 import { AppController } from './app.controller'
@@ -9,6 +9,8 @@ import { getConfigModuleConfig } from './configs'
 import { EnvModule } from './env/env.module'
 import { DatabaseModule } from './database/database.module'
 import { AuthModule } from './auth/auth.module'
+import { AuthMiddleware } from './auth/middlewares'
+import { JwtModule } from '@nestjs/jwt'
 
 @Module({
   imports: [
@@ -16,9 +18,17 @@ import { AuthModule } from './auth/auth.module'
     UserModule,
     EnvModule,
     DatabaseModule,
+    JwtModule,
     AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes({
+      path: '*',
+      method: RequestMethod.ALL,
+    })
+  }
+}
