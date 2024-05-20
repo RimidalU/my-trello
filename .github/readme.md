@@ -1,6 +1,6 @@
 <img src="./assets/my-trello.svg" id="start" align="right" alt="Project logo" width="50" >
 
-# Book Swap.
+# My Trello.
 
 > `My Trello` service server on Nest framework. 
 
