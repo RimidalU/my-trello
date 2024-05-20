@@ -18,7 +18,11 @@ import {
   UserResponseDto,
   UsersResponseDto,
 } from './dto'
-import { GetAllSwaggerDecorator, GetByIdSwaggerDecorator } from './decorators'
+import {
+  CreateSwaggerDecorator,
+  GetAllSwaggerDecorator,
+  GetByIdSwaggerDecorator,
+} from './decorators'
 
 @Controller('user')
 @ApiTags('User routes')
@@ -26,6 +30,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @CreateSwaggerDecorator()
   async create(
     @Body() payload: CreateUserDto,
   ): Promise<UserConfirmationResponseDto> {
