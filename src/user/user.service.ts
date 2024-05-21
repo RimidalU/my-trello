@@ -5,6 +5,7 @@ import { UserEntity } from './entities'
 import { Repository } from 'typeorm'
 import { UserNotCreatedException, UserNotFoundException } from './exceptions'
 import { CreateUserDto } from './dto'
+import { UpdateUserDto } from './dto/update-user.dto'
 
 @Injectable()
 export class UserService {
@@ -49,5 +50,13 @@ export class UserService {
     const entity = await this.getById(id)
     await this.userRepository.remove(entity)
     return id
+  }
+
+  async update(id: number, payload: UpdateUserDto): Promise<number> {
+    const entity = await this.getById(id)
+    Object.assign(entity, payload)
+
+    await this.userRepository.save(entity)
+    return entity.id
   }
 }
