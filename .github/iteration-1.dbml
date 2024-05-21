@@ -1,0 +1,58 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table user {
+  id integer [primary key]
+  name varchar
+  email varchar
+  hash_pasword varchar
+  created_at timestamp
+}
+
+Table board {
+  id integer [primary key]
+  name varchar
+  user_id integer
+  is_public bool
+  created_at timestamp
+}
+
+Table list {
+  id integer [primary key]
+  name varchar
+  board_id integer
+  position integer
+  user_id integer
+  created_at timestamp
+}
+
+Table card {
+  id integer [primary key]
+  name varchar
+  list_id integer
+  description text
+  user_id integer
+  created_at timestamp
+}
+
+Table comment {
+  id integer [primary key]
+  description varchar
+  user_id integer
+  card_id integer
+  created_at timestamp
+}
+
+Ref: board.user_id > user.id
+
+Ref: list.board_id > board.id
+
+Ref: card.list_id > list.id
+
+Ref: comment.user_id > user.id
+
+Ref: list.user_id > user.id
+
+Ref: card.user_id > user.id
+
+Ref: comment.card_id > card.id

@@ -2,7 +2,7 @@
 
 # My Trello.
 
-> `My Trello` service server on Nest framework. 
+> `My Trello` service server on Nest framework.
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/RimidalU/my-trello)
 ![license](https://img.shields.io/github/license/RimidalU/my-trello)
@@ -35,14 +35,25 @@
 ![Zod](https://img.shields.io/badge/Zod-3E67B1.svg?style=for-the-badge&logo=Zod&logoColor=white)
 ![Docker](https://img.shields.io/badge/-Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-[//]: # (<img src="./assets/home.png" width="600" />)
-
-[//]: # (<img src="./assets/home1.png" width="600" />)
-
+[//]: # '<img src="./assets/home.png" width="600" />'
+[//]: # '<img src="./assets/home1.png" width="600" />'
 
 ## Description
 
-... 
+#### ERD iteration-1:
+
+<details>
+
+[![Link ERD](./assets/iteration-1.png)](https://dbdiagram.io/d/6647856bf84ecd1d2279d699)
+
+</details>
+
+
+- [ERD File](./iteration-1.dbml)
+
+- [To ERD on dbdiagram.io](https://dbdiagram.io/d/6647856bf84ecd1d2279d699)
+
+...
 
 ## Project setup
 
@@ -65,7 +76,7 @@ Or run locally:
 
 <!-- Run [Live Demo](https://react-rtk-table.netlify.app/) -->
 
-[//]: # (![tutorial][tutorial])
+[//]: # '![tutorial][tutorial]'
 
 ## Project Status
 
