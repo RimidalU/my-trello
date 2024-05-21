@@ -6,6 +6,7 @@ import {
   NotAcceptableException,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common'
@@ -26,12 +27,14 @@ import {
   GetAllSwaggerDecorator,
   GetByIdSwaggerDecorator,
   RemoveSwaggerDecorator,
+  UpdateSwaggerDecorator,
   UserInfo,
 } from './decorators'
 import { JwtAuthGuard } from '@src/auth/strategies/jwt-auth.guard'
+import { UpdateUserDto } from './dto/update-user.dto'
 
-@Controller('user')
-@ApiTags('User routes')
+@Controller('users')
+@ApiTags('Users routes')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -81,6 +84,23 @@ export class UserController {
     }
 
     const userId = await this.userService.remove(id)
+
+    return this.buildUserConfirmationResponse(userId)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  @UpdateSwaggerDecorator()
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UpdateUserDto,
+    @UserInfo('id') currentUserId: number,
+  ): Promise<UserConfirmationResponseDto> {
+    if (id !== currentUserId) {
+      throw new NotAcceptableException()
+    }
+
+    const userId = await this.userService.update(id, payload)
 
     return this.buildUserConfirmationResponse(userId)
   }
