@@ -9,18 +9,9 @@ Table user {
   created_at timestamp
 }
 
-Table board {
-  id integer [primary key]
-  name varchar
-  user_id integer
-  is_public bool
-  created_at timestamp
-}
-
 Table list {
   id integer [primary key]
   name varchar
-  board_id integer
   position integer
   user_id integer
   created_at timestamp
@@ -42,10 +33,6 @@ Table comment {
   card_id integer
   created_at timestamp
 }
-
-Ref: board.user_id > user.id
-
-Ref: list.board_id > board.id
 
 Ref: card.list_id > list.id
 
