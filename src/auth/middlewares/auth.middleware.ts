@@ -6,7 +6,7 @@ import {
 import { Response, NextFunction } from 'express'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
-import { ExpressRequestType } from '@src/user'
+import { ExpressRequestType } from '@src/users'
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {

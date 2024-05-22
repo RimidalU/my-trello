@@ -2,25 +2,24 @@ import { applyDecorators } from '@nestjs/common'
 
 import {
   ApiBearerAuth,
+  ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOperation,
-  ApiResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 
-import { UserResponseDto } from '@src/user/dto'
+import { ListConfirmationResponseDto } from '../dto'
 
-export function GetByIdSwaggerDecorator() {
+export function CreateSwaggerDecorator() {
   return applyDecorators(
     ApiBearerAuth(),
 
-    ApiOperation({ summary: 'Get User by id' }),
+    ApiOperation({ summary: 'Create List of Cards' }),
     ApiNotFoundResponse({ description: 'Not Found' }),
     ApiUnauthorizedResponse({ description: 'Unauthorized' }),
-    ApiResponse({
-      status: 200,
-      description: 'The found record',
-      type: UserResponseDto,
+    ApiCreatedResponse({
+      description: 'List created',
+      type: ListConfirmationResponseDto,
     }),
   )
 }

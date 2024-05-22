@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer'
 import { validate } from 'class-validator'
 
-import { CreateUserDto } from '@src/user/dto/create-user.dto'
+import { CreateUserDto } from '@src/users/dto/create-user.dto'
 
 describe('create-user.dto', () => {
   let dto

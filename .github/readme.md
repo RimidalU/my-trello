@@ -44,14 +44,14 @@
 
 <details>
 
-[![Link ERD](./assets/iteration-1.png)](https://dbdiagram.io/d/6647856bf84ecd1d2279d699)
+[![Link ERD](./assets/iteration-1.png)](https://dbdiagram.io/d/my-trello-1-664e2370f84ecd1d22e1c216)
 
 </details>
 
 
 - [ERD File](./iteration-1.dbml)
 
-- [To ERD on dbdiagram.io](https://dbdiagram.io/d/6647856bf84ecd1d2279d699)
+- [To ERD on dbdiagram.io](https://dbdiagram.io/d/my-trello-1-664e2370f84ecd1d22e1c216)
 
 ...
 
