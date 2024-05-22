@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { UserModule } from './user/user.module'
+import { UserModule } from './users/user.module'
 
 import { getConfigModuleConfig } from './configs'
 import { EnvModule } from './env/env.module'

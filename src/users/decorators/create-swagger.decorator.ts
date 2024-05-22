@@ -6,7 +6,7 @@ import {
   ApiOperation,
 } from '@nestjs/swagger'
 
-import { UserConfirmationResponseDto } from '@src/user/dto'
+import { UserConfirmationResponseDto } from '@src/users/dto'
 
 export function CreateSwaggerDecorator() {
   return applyDecorators(

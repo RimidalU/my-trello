@@ -9,7 +9,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 
-import { UserConfirmationResponseDto } from '@src/user/dto'
+import { UserConfirmationResponseDto } from '@src/users/dto'
 
 export function RemoveSwaggerDecorator() {
   return applyDecorators(

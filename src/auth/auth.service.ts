@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt'
 
 import * as bcrypt from 'bcrypt'
 
-import { UserService } from '@src/user'
+import { UserService } from '@src/users'
 
 import { ValidateUserDto } from './dto'
 import { UserValidatedType } from './types/user-validated.type'
