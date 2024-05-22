@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module'
 import { AuthMiddleware } from './auth/middlewares'
 import { JwtModule } from '@nestjs/jwt'
 import { CardsModule } from './cards/cards.module'
+import { ListsModule } from './lists/lists.module'
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CardsModule } from './cards/cards.module'
     JwtModule,
     AuthModule,
     CardsModule,
+    ListsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
