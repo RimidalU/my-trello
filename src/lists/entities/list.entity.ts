@@ -21,7 +21,7 @@ export class ListEntity {
 
   @JoinColumn({ name: 'userId' })
   @ManyToOne(() => UserEntity)
-  public user_id: UserEntity
+  public userId: UserEntity
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt: Date
