@@ -1,11 +1,24 @@
-import { Body, Controller, Post, UseGuards, Get } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+  Get,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common'
 import { ListsService } from './lists.service'
 import { JwtAuthGuard } from '@src/auth/strategies/jwt-auth.guard'
 import { UserInfo } from '@src/users/decorators'
 import { CreateListDto, ListItemDto, ListsResponseDto } from './dto'
 import { ListConfirmationResponseDto } from './dto'
-import { CreateSwaggerDecorator, GetAllSwaggerDecorator } from './decorators'
+import {
+  CreateSwaggerDecorator,
+  GetAllSwaggerDecorator,
+  GetByIdSwaggerDecorator,
+} from './decorators'
 import { ListEntity } from './entities'
+import { ListResponseDto } from './dto/list-response.dto'
 
 @Controller('lists')
 export class ListsController {
@@ -31,6 +44,19 @@ export class ListsController {
 
     return {
       lists: lists.map((list) => this.buildListResponse(list)),
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  @GetByIdSwaggerDecorator()
+  async getById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ListResponseDto> {
+    const listInfo = await this.listService.getById(id)
+
+    return {
+      list: this.buildListResponse(listInfo),
     }
   }
 
