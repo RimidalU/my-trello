@@ -18,10 +18,16 @@ export class ListsService {
     const owner = await this.userRepository.findOneBy({ id: currentUserId })
 
     const newList = new ListEntity()
-    Object.assign(newList, { ...payload, user_id: owner })
+    Object.assign(newList, { ...payload, owner })
 
     const list = await this.listRepository.save(newList)
-
     return list.id
+  }
+
+  async getAll(): Promise<ListEntity[]> {
+    const lists = await this.listRepository.find({
+      relations: ['owner'],
+    })
+    return lists
   }
 }
