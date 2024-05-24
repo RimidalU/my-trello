@@ -17,11 +17,4 @@ export class CreateListDto {
     description: 'The List position',
   })
   readonly position: number
-
-  @IsNumber()
-  @ApiProperty({
-    example: 12,
-    description: 'List Owner id',
-  })
-  readonly user_id: number | null
 }
