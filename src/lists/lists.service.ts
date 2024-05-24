@@ -4,6 +4,7 @@ import { UserEntity } from '@src/users/entities'
 import { Repository } from 'typeorm'
 import { ListEntity } from './entities'
 import { CreateListDto } from './dto'
+import { ListNotFoundException } from './exceptions'
 
 @Injectable()
 export class ListsService {
@@ -29,5 +30,18 @@ export class ListsService {
       relations: ['owner'],
     })
     return lists
+  }
+
+  async getById(id: number): Promise<ListEntity> {
+    const list = await this.listRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['owner'],
+    })
+    if (!list) {
+      throw new ListNotFoundException(['id', id])
+    }
+    return list
   }
 }
