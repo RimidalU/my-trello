@@ -19,9 +19,9 @@ export class ListEntity {
   @Column('int2')
   position: number
 
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'owner' })
   @ManyToOne(() => UserEntity)
-  public userId: UserEntity
+  public owner: UserEntity
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt: Date
