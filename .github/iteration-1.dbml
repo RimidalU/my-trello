@@ -13,33 +13,34 @@ Table list {
   id integer [primary key]
   name varchar
   position integer
-  user_id integer
+  owner integer
   created_at timestamp
 }
 
 Table card {
   id integer [primary key]
   name varchar
-  list_id integer
+  list integer
   description text
-  user_id integer
+  position integer
+  owner integer
   created_at timestamp
 }
 
 Table comment {
   id integer [primary key]
   description varchar
-  user_id integer
-  card_id integer
+  owner integer
+  card integer
   created_at timestamp
 }
 
-Ref: card.list_id > list.id
+Ref: card.list > list.id
 
-Ref: comment.user_id > user.id
+Ref: comment.owner > user.id
 
-Ref: list.user_id > user.id
+Ref: list.owner > user.id
 
-Ref: card.user_id > user.id
+Ref: card.owner > user.id
 
-Ref: comment.card_id > card.id
+Ref: comment.card > card.id
