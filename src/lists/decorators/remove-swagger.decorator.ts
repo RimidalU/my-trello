@@ -1,27 +1,27 @@
 import { applyDecorators } from '@nestjs/common'
 
 import {
-  ApiBearerAuth,
   ApiNotAcceptableResponse,
   ApiNotFoundResponse,
-  ApiOkResponse,
   ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
+import { ListConfirmationResponseDto } from '../dto'
 
-import { UserConfirmationResponseDto } from '@src/users/dto'
-
-export function UpdateSwaggerDecorator() {
+export function RemoveSwaggerDecorator() {
   return applyDecorators(
     ApiBearerAuth(),
 
-    ApiOperation({ summary: 'Update User' }),
+    ApiOperation({ summary: 'Remove List' }),
     ApiNotFoundResponse({ description: 'Not Found' }),
-    ApiUnauthorizedResponse({ description: 'Unauthorized' }),
     ApiNotAcceptableResponse({ description: 'Not Acceptable' }),
-    ApiOkResponse({
-      description: 'User Updated',
-      type: UserConfirmationResponseDto,
+    ApiUnauthorizedResponse({ description: 'Unauthorized' }),
+    ApiResponse({
+      status: 200,
+      description: 'List removed',
+      type: ListConfirmationResponseDto,
     }),
   )
 }
