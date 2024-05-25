@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotAcceptableException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
@@ -6,7 +6,7 @@ import { UserEntity } from '@src/users/entities'
 
 import { ListNotFoundException } from './exceptions'
 import { ListEntity } from './entities'
-import { CreateListDto } from './dto'
+import { CreateListDto, UpdateListDto } from './dto'
 
 @Injectable()
 export class ListsService {
@@ -51,5 +51,22 @@ export class ListsService {
     const list = await this.getById(id)
     await this.listRepository.remove(list)
     return id
+  }
+
+  async update(
+    id: number,
+    payload: UpdateListDto,
+    currentUserId: number,
+  ): Promise<number> {
+    const entity = await this.getById(id)
+
+    if (entity.owner.id !== currentUserId) {
+      throw new NotAcceptableException()
+    }
+
+    Object.assign(entity, payload)
+
+    await this.listRepository.save(entity)
+    return entity.id
   }
 }
