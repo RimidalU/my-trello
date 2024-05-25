@@ -6,19 +6,26 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Delete,
+  NotAcceptableException,
 } from '@nestjs/common'
 import { ListsService } from './lists.service'
 import { JwtAuthGuard } from '@src/auth/strategies/jwt-auth.guard'
 import { UserInfo } from '@src/users/decorators'
-import { CreateListDto, ListItemDto, ListsResponseDto } from './dto'
-import { ListConfirmationResponseDto } from './dto'
+import {
+  CreateListDto,
+  ListItemDto,
+  ListsResponseDto,
+  ListResponseDto,
+  ListConfirmationResponseDto,
+} from './dto'
 import {
   CreateSwaggerDecorator,
   GetAllSwaggerDecorator,
   GetByIdSwaggerDecorator,
+  RemoveSwaggerDecorator,
 } from './decorators'
 import { ListEntity } from './entities'
-import { ListResponseDto } from './dto/list-response.dto'
 
 @Controller('lists')
 export class ListsController {
@@ -58,6 +65,22 @@ export class ListsController {
     return {
       list: this.buildListResponse(listInfo),
     }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  @RemoveSwaggerDecorator()
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @UserInfo('id') currentUserId: number,
+  ): Promise<ListConfirmationResponseDto> {
+    if (id !== currentUserId) {
+      throw new NotAcceptableException()
+    }
+
+    const listId = await this.listService.remove(id)
+
+    return this.buildListConfirmationResponse(listId)
   }
 
   private buildListConfirmationResponse(
