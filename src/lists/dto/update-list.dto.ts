@@ -8,7 +8,7 @@ export class UpdateListDto {
   @IsNotEmpty()
   @ApiProperty({
     example: 'My List',
-    description: 'User Name',
+    description: 'List Name',
   })
   readonly name: string
 
