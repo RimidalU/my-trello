@@ -19,12 +19,4 @@ export class UpdateListDto {
     description: 'The List position',
   })
   readonly position: number
-
-  @IsNumber()
-  @IsOptional()
-  @ApiProperty({
-    example: 12,
-    description: 'List Owner id',
-  })
-  readonly user_id: number | null
 }
