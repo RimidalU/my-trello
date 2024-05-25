@@ -15,7 +15,7 @@ export function UpdateSwaggerDecorator() {
   return applyDecorators(
     ApiBearerAuth(),
 
-    ApiOperation({ summary: 'Update User by id' }),
+    ApiOperation({ summary: 'Update User' }),
     ApiNotFoundResponse({ description: 'Not Found' }),
     ApiUnauthorizedResponse({ description: 'Unauthorized' }),
     ApiNotAcceptableResponse({ description: 'Not Acceptable' }),
