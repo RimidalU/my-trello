@@ -5,6 +5,7 @@ import { Repository } from 'typeorm'
 import { UserEntity } from '@src/users/entities'
 import { CommentEntity } from './entities'
 import { CreateCommentDto } from './dto'
+import { CommentNotFoundException } from './exceptions'
 
 @Injectable()
 export class CommentsService {
@@ -26,5 +27,18 @@ export class CommentsService {
 
     const comment = await this.commentRepository.save(newComment)
     return comment.id
+  }
+
+  async getById(id: number): Promise<CommentEntity> {
+    const comment = await this.commentRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['owner'],
+    })
+    if (!comment) {
+      throw new CommentNotFoundException(['id', id])
+    }
+    return comment
   }
 }

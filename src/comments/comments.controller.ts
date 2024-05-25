@@ -1,10 +1,24 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Param,
+  ParseIntPipe,
+  Post,
+  Get,
+  UseGuards,
+} from '@nestjs/common'
 import { CommentsService } from './comments.service'
 import { JwtAuthGuard } from '@src/auth/strategies/jwt-auth.guard'
 import { UserInfo } from '@src/users/decorators'
-import { CommentConfirmationResponseDto, CreateCommentDto } from './dto'
-import { CreateSwaggerDecorator } from './decorators'
+import {
+  CommentConfirmationResponseDto,
+  CommentItemDto,
+  CommentResponseDto,
+  CreateCommentDto,
+} from './dto'
+import { CreateSwaggerDecorator, GetByIdSwaggerDecorator } from './decorators'
 import { ApiTags } from '@nestjs/swagger'
+import { CommentEntity } from './entities'
 
 @Controller('comments')
 @ApiTags('Comments routes')
@@ -23,12 +37,39 @@ export class CommentsController {
     return this.buildCommentConfirmationResponse(listId)
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  @GetByIdSwaggerDecorator()
+  async getById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<CommentResponseDto> {
+    const commentInfo = await this.commentService.getById(id)
+
+    return {
+      comment: this.buildCommentResponse(commentInfo),
+    }
+  }
+
   private buildCommentConfirmationResponse(
     commentId: number,
   ): CommentConfirmationResponseDto {
     return {
       comment: {
         itemId: commentId,
+      },
+    }
+  }
+
+  private buildCommentResponse(comment: CommentEntity): CommentItemDto {
+    return {
+      itemId: comment.id,
+      item: {
+        description: comment.description,
+        createdAt: comment.createdAt,
+      },
+      owner: {
+        id: comment.owner.id,
+        name: comment.owner.name,
       },
     }
   }
