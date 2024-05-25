@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { UserEntity } from '@src/users/entities'
 import { Repository } from 'typeorm'
+
+import { UserEntity } from '@src/users/entities'
+
+import { ListNotFoundException } from './exceptions'
 import { ListEntity } from './entities'
 import { CreateListDto } from './dto'
-import { ListNotFoundException } from './exceptions'
 
 @Injectable()
 export class ListsService {
@@ -43,5 +45,11 @@ export class ListsService {
       throw new ListNotFoundException(['id', id])
     }
     return list
+  }
+
+  async remove(id: number): Promise<number> {
+    const list = await this.getById(id)
+    await this.listRepository.remove(list)
+    return id
   }
 }
