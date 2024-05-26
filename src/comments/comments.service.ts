@@ -4,7 +4,7 @@ import { Repository } from 'typeorm'
 
 import { UserEntity } from '@src/users/entities'
 import { CommentEntity } from './entities'
-import { CreateCommentDto } from './dto'
+import { CreateCommentDto, UpdateCommentDto } from './dto'
 import { CommentNotFoundException } from './exceptions'
 
 @Injectable()
@@ -51,5 +51,22 @@ export class CommentsService {
 
     await this.commentRepository.remove(entity)
     return id
+  }
+
+  async update(
+    id: number,
+    payload: UpdateCommentDto,
+    currentUserId: number,
+  ): Promise<number> {
+    const entity = await this.getById(id)
+
+    if (entity.owner.id !== currentUserId) {
+      throw new NotAcceptableException()
+    }
+
+    Object.assign(entity, payload)
+
+    await this.commentRepository.save(entity)
+    return entity.id
   }
 }
