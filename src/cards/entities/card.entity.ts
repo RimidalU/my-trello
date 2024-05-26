@@ -1,4 +1,5 @@
-import { CardEntity } from '@src/cards/entities'
+import { CommentEntity } from '@src/comments/entities'
+import { ListEntity } from '@src/lists/entities'
 import { UserEntity } from '@src/users/entities'
 import {
   Column,
@@ -10,13 +11,16 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
-@Entity('list')
-export class ListEntity {
+@Entity('card')
+export class CardEntity {
   @PrimaryGeneratedColumn()
   id: number
 
   @Column()
   name: string
+
+  @Column()
+  description: string
 
   @Column('int2')
   position: number
@@ -25,9 +29,12 @@ export class ListEntity {
   @ManyToOne(() => UserEntity)
   public owner: UserEntity
 
-  @JoinColumn({ name: 'cards' })
-  @OneToMany(() => CardEntity, (card) => card.list, { eager: true })
-  public cards: CardEntity[]
+  @JoinColumn({ name: 'comments' })
+  @OneToMany(() => CommentEntity, (comment) => comment.card, { eager: true })
+  public comments: CommentEntity[]
+
+  @ManyToOne(() => ListEntity, (list) => list.cards)
+  list: CardEntity
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt: Date

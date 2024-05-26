@@ -14,16 +14,18 @@ Table list {
   name varchar
   position integer
   owner integer
+  cards integer[]
   created_at timestamp
 }
 
 Table card {
   id integer [primary key]
   name varchar
-  list integer
   description text
   position integer
   owner integer
+  list integer
+  comments integer[]
   created_at timestamp
 }
 
@@ -35,7 +37,7 @@ Table comment {
   created_at timestamp
 }
 
-Ref: card.list > list.id
+Ref: list.cards > card.list
 
 Ref: comment.owner > user.id
 
@@ -43,4 +45,4 @@ Ref: list.owner > user.id
 
 Ref: card.owner > user.id
 
-Ref: comment.card > card.id
+Ref: card.comments > comment.card
