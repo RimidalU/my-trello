@@ -29,8 +29,10 @@ import {
   UpdateSwaggerDecorator,
 } from './decorators'
 import { ListEntity } from './entities'
+import { ApiTags } from '@nestjs/swagger'
 
 @Controller('lists')
+@ApiTags('Lists routes')
 export class ListsController {
   constructor(private readonly listService: ListsService) {}
 
