@@ -7,6 +7,7 @@ import {
   Get,
   UseGuards,
   Delete,
+  Patch,
 } from '@nestjs/common'
 import { CommentsService } from './comments.service'
 import { JwtAuthGuard } from '@src/auth/strategies/jwt-auth.guard'
@@ -16,11 +17,13 @@ import {
   CommentItemDto,
   CommentResponseDto,
   CreateCommentDto,
+  UpdateCommentDto,
 } from './dto'
 import {
   CreateSwaggerDecorator,
   GetByIdSwaggerDecorator,
   RemoveSwaggerDecorator,
+  UpdateSwaggerDecorator,
 } from './decorators'
 import { ApiTags } from '@nestjs/swagger'
 import { CommentEntity } from './entities'
@@ -65,6 +68,29 @@ export class CommentsController {
     const commentId = await this.commentService.remove(id, currentUserId)
 
     return this.buildCommentConfirmationResponse(commentId)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  @UpdateSwaggerDecorator()
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UpdateCommentDto,
+    @UserInfo('id') currentUserId: number,
+  ): Promise<CommentConfirmationResponseDto> {
+    const listId = await this.commentService.update(id, payload, currentUserId)
+
+    return this.buildListConfirmationResponse(listId)
+  }
+
+  private buildListConfirmationResponse(
+    commentId: number,
+  ): CommentConfirmationResponseDto {
+    return {
+      comment: {
+        itemId: commentId,
+      },
+    }
   }
 
   private buildCommentConfirmationResponse(
