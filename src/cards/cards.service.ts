@@ -20,15 +20,10 @@ export class CardsService {
 
   async create(
     currentUserId: number,
-    listId: number,
+    list: ListEntity,
     payload: CreateCardDto,
   ): Promise<number> {
     const owner = await this.userRepository.findOneBy({ id: currentUserId })
-    const list = await this.listRepository.findOneBy({ id: listId })
-
-    if (!list) {
-      throw new ListNotFoundException(['id', listId])
-    }
 
     const newCard = new CardEntity()
     Object.assign(newCard, { ...payload, owner })
@@ -39,5 +34,17 @@ export class CardsService {
     await this.listRepository.save(list)
 
     return card.id
+  }
+
+  async getAllByListId(list: ListEntity): Promise<CardEntity[]> {
+    return list.cards
+  }
+
+  async checkList(listId: number): Promise<ListEntity> {
+    const list = await this.listRepository.findOneBy({ id: listId })
+    if (!list) {
+      throw new ListNotFoundException(['id', listId])
+    }
+    return list
   }
 }
