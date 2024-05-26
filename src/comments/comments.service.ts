@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotAcceptableException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
@@ -40,5 +40,16 @@ export class CommentsService {
       throw new CommentNotFoundException(['id', id])
     }
     return comment
+  }
+
+  async remove(id: number, currentUserId: number): Promise<number> {
+    const entity = await this.getById(id)
+
+    if (entity.owner.id !== currentUserId) {
+      throw new NotAcceptableException()
+    }
+
+    await this.commentRepository.remove(entity)
+    return id
   }
 }
