@@ -6,6 +6,7 @@ import {
   UseGuards,
   Get,
   ParseIntPipe,
+  Delete,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { CardsService } from './cards.service'
@@ -23,9 +24,11 @@ import {
   CreateSwaggerDecorator,
   GetAllSwaggerDecorator,
   GetByIdSwaggerDecorator,
+  RemoveSwaggerDecorator,
 } from './decorators'
 import { ListEntity } from '@src/lists/entities'
 import { CardEntity } from './entities'
+import { UserEntity } from '@src/users/entities'
 
 @Controller('lists/:listId/cards')
 @ApiTags('Cards routes')
@@ -79,6 +82,18 @@ export class CardsController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  @RemoveSwaggerDecorator()
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @UserInfo('id') currentUserId: number,
+  ): Promise<CardConfirmationResponseDto> {
+    const cardId = await this.cardsService.remove(id, currentUserId)
+
+    return this.buildCardConfirmationResponse(cardId)
+  }
+
   private buildCardConfirmationResponse(
     cardId: number,
   ): CardConfirmationResponseDto {
@@ -102,6 +117,22 @@ export class CardsController {
   }
 
   private buildCardFullResponse(card: CardEntity): CardItemFullDto {
+    const buildCommentOwner = (owner: UserEntity) => {
+      return {
+        id: owner.id,
+        name: owner.name,
+      }
+    }
+
+    const buildComments = card.comments.map((item) => {
+      return {
+        id: item.id,
+        description: item.description,
+        createdAt: item.createdAt,
+        owner: buildCommentOwner(item.owner),
+      }
+    })
+
     return {
       itemId: card.id,
       item: {
@@ -116,11 +147,7 @@ export class CardsController {
         email: card.owner.email,
         createdAt: card.owner.createdAt,
       },
-      comments: {
-        id: card.comments[0].id,
-        description: card.comments[0].description,
-        createdAt: card.comments[0].createdAt,
-      },
+      comments: buildComments,
     }
   }
 }
