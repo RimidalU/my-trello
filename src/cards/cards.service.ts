@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotAcceptableException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserEntity } from '@src/users/entities'
 import { Repository } from 'typeorm'
@@ -53,6 +53,17 @@ export class CardsService {
     console.log(card)
 
     return card
+  }
+
+  async remove(id: number, currentUserId: number): Promise<number> {
+    const entity = await this.getById(id)
+
+    if (entity.owner.id !== currentUserId) {
+      throw new NotAcceptableException()
+    }
+
+    await this.cardRepository.remove(entity)
+    return id
   }
 
   async checkList(listId: number): Promise<ListEntity> {
