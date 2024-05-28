@@ -50,8 +50,6 @@ export class CardsService {
     if (!card) {
       throw new ListNotFoundException(['id', id])
     }
-    console.log(card)
-
     return card
   }
 
