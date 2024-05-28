@@ -18,10 +18,12 @@ export class CommentEntity {
   description: string
 
   @JoinColumn({ name: 'owner' })
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, {
+    eager: true,
+  })
   public owner: UserEntity
 
-  @ManyToOne(() => CardEntity, (card) => card.comments)
+  @ManyToOne(() => CardEntity, (card) => card.comments, { onDelete: 'CASCADE' })
   card: CardEntity
 
   @CreateDateColumn({ type: 'timestamp with time zone' })

@@ -34,7 +34,6 @@ export class CommentsService {
       where: {
         id,
       },
-      relations: ['owner'],
     })
     if (!comment) {
       throw new CommentNotFoundException(['id', id])
