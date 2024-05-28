@@ -30,7 +30,9 @@ export class CardEntity {
   public owner: UserEntity
 
   @JoinColumn({ name: 'comments' })
-  @OneToMany(() => CommentEntity, (comment) => comment.card, { eager: true })
+  @OneToMany(() => CommentEntity, (comment) => comment.card, {
+    cascade: ['remove'],
+  })
   public comments: CommentEntity[]
 
   @ManyToOne(() => ListEntity, (list) => list.cards)
