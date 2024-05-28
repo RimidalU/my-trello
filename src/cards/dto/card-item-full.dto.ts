@@ -18,5 +18,5 @@ export class CardItemFullDto {
   readonly owner: CardOwnerInfoDTO
 
   @ApiProperty()
-  readonly comments: CardCommentsInfoDto
+  readonly comments: CardCommentsInfoDto[]
 }
