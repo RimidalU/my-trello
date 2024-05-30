@@ -7,6 +7,7 @@ import {
   Get,
   ParseIntPipe,
   Delete,
+  Patch,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { CardsService } from './cards.service'
@@ -19,12 +20,14 @@ import {
   CardResponseDto,
   CardsResponseDto,
   CreateCardDto,
+  UpdateCardDto,
 } from './dto'
 import {
   CreateSwaggerDecorator,
   GetAllSwaggerDecorator,
   GetByIdSwaggerDecorator,
   RemoveSwaggerDecorator,
+  UpdateSwaggerDecorator,
 } from './decorators'
 import { ListEntity } from '@src/lists/entities'
 import { CardEntity } from './entities'
@@ -90,6 +93,35 @@ export class CardsController {
     @UserInfo('id') currentUserId: number,
   ): Promise<CardConfirmationResponseDto> {
     const cardId = await this.cardsService.remove(id, currentUserId)
+
+    return this.buildCardConfirmationResponse(cardId)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  @UpdateSwaggerDecorator()
+  async update(
+    @UserInfo('id') currentUserId: number,
+    @Param('listId') listId: number,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UpdateCardDto,
+  ): Promise<CardConfirmationResponseDto> {
+    let list = null
+    let newList = null
+    const { newListId, ...newPayload } = payload
+    list = await this.checkList(listId)
+
+    if (newListId) {
+      newList = await this.checkList(payload.newListId)
+    }
+
+    const cardId = await this.cardsService.update(
+      id,
+      newPayload,
+      currentUserId,
+      list,
+      newList,
+    )
 
     return this.buildCardConfirmationResponse(cardId)
   }
