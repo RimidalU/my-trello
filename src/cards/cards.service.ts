@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { UserEntity } from '@src/users/entities'
 import { Repository } from 'typeorm'
 import { CardEntity } from './entities'
-import { CreateCardDto } from './dto'
+import { CreateCardDto, UpdateCardDto } from './dto'
 import { ListNotFoundException } from '@src/lists/exceptions'
 import { ListEntity } from '@src/lists/entities'
 
@@ -62,6 +62,34 @@ export class CardsService {
 
     await this.cardRepository.remove(entity)
     return id
+  }
+
+  async update(
+    id: number,
+    payload: UpdateCardDto,
+    currentUserId: number,
+    list: ListEntity,
+    newList: ListEntity,
+  ): Promise<number> {
+    const entity = await this.getById(id)
+
+    if (entity.owner.id !== currentUserId) {
+      throw new NotAcceptableException()
+    }
+
+    Object.assign(entity, payload)
+
+    list.cards.filter((card) => card.id !== id)
+
+    await this.cardRepository.save(entity)
+    await this.listRepository.save(list)
+
+    if (newList) {
+      newList.cards.push(entity)
+      await this.listRepository.save(newList)
+    }
+
+    return entity.id
   }
 
   async checkList(listId: number): Promise<ListEntity> {
