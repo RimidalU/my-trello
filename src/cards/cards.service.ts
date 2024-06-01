@@ -4,8 +4,8 @@ import { UserEntity } from '@src/users/entities'
 import { Repository } from 'typeorm'
 import { CardEntity } from './entities'
 import { CreateCardDto, UpdateCardDto } from './dto'
-import { ListNotFoundException } from '@src/lists/exceptions'
 import { ListEntity } from '@src/lists/entities'
+import { CardNotFoundException } from './exceptions'
 
 @Injectable()
 export class CardsService {
@@ -48,7 +48,7 @@ export class CardsService {
       relations: ['owner', 'comments'],
     })
     if (!card) {
-      throw new ListNotFoundException(['id', id])
+      throw new CardNotFoundException(['id', id])
     }
     return card
   }
@@ -95,7 +95,7 @@ export class CardsService {
   async getListById(listId: number): Promise<ListEntity> {
     const list = await this.listRepository.findOneBy({ id: listId })
     if (!list) {
-      throw new ListNotFoundException(['id', listId])
+      throw new CardNotFoundException(['id', listId])
     }
     return list
   }
