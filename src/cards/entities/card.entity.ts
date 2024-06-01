@@ -31,6 +31,7 @@ export class CardEntity {
 
   @JoinColumn({ name: 'comments' })
   @OneToMany(() => CommentEntity, (comment) => comment.card, {
+    eager: true,
     cascade: ['remove'],
   })
   public comments: CommentEntity[]
