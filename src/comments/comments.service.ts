@@ -6,6 +6,8 @@ import { UserEntity } from '@src/users/entities'
 import { CommentEntity } from './entities'
 import { CreateCommentDto, UpdateCommentDto } from './dto'
 import { CommentNotFoundException } from './exceptions'
+import { CardEntity } from '@src/cards/entities'
+import { CardNotFoundException } from '@src/cards/exceptions'
 
 @Injectable()
 export class CommentsService {
@@ -14,10 +16,13 @@ export class CommentsService {
     private readonly commentRepository: Repository<CommentEntity>,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(CardEntity)
+    private readonly cardRepository: Repository<CardEntity>,
   ) {}
 
   async create(
     currentUserId: number,
+    card: CardEntity,
     payload: CreateCommentDto,
   ): Promise<number> {
     const owner = await this.userRepository.findOneBy({ id: currentUserId })
@@ -67,5 +72,13 @@ export class CommentsService {
 
     await this.commentRepository.save(entity)
     return entity.id
+  }
+
+  async getCardById(cardId: number): Promise<CardEntity> {
+    const card = await this.cardRepository.findOneBy({ id: cardId })
+    if (!card) {
+      throw new CardNotFoundException(['id', cardId])
+    }
+    return card
   }
 }
