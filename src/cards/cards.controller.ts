@@ -46,15 +46,15 @@ export class CardsController {
     @Param('listId') listId: number,
     @Body() payload: CreateCardDto,
   ): Promise<CardConfirmationResponseDto> {
-    const list = await this.checkList(listId)
+    const list = await this.getListById(listId)
 
     const cardId = await this.cardsService.create(currentUserId, list, payload)
 
     return this.buildCardConfirmationResponse(cardId)
   }
 
-  private async checkList(listId: number): Promise<ListEntity> {
-    return await this.cardsService.checkList(listId)
+  private async getListById(listId: number): Promise<ListEntity> {
+    return await this.cardsService.getListById(listId)
   }
 
   @UseGuards(JwtAuthGuard)
@@ -63,7 +63,7 @@ export class CardsController {
   async getAllByListId(
     @Param('listId') listId: number,
   ): Promise<CardsResponseDto> {
-    const list = await this.checkList(listId)
+    const list = await this.getListById(listId)
 
     const cards = await this.cardsService.getAllByListId(list)
 
@@ -109,10 +109,10 @@ export class CardsController {
     let list = null
     let newList = null
     const { newListId, ...newPayload } = payload
-    list = await this.checkList(listId)
+    list = await this.getListById(listId)
 
     if (newListId) {
-      newList = await this.checkList(payload.newListId)
+      newList = await this.getListById(payload.newListId)
     }
 
     const cardId = await this.cardsService.update(

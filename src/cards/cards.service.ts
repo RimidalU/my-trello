@@ -92,7 +92,7 @@ export class CardsService {
     return entity.id
   }
 
-  async checkList(listId: number): Promise<ListEntity> {
+  async getListById(listId: number): Promise<ListEntity> {
     const list = await this.listRepository.findOneBy({ id: listId })
     if (!list) {
       throw new ListNotFoundException(['id', listId])
