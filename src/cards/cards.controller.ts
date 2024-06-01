@@ -33,13 +33,13 @@ import { ListEntity } from '@src/lists/entities'
 import { CardEntity } from './entities'
 import { UserEntity } from '@src/users/entities'
 
-@Controller('lists/:listId/cards')
+@Controller()
 @ApiTags('Cards routes')
 export class CardsController {
   constructor(private readonly cardsService: CardsService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post()
+  @Post('lists/:listId/cards')
   @CreateSwaggerDecorator()
   async create(
     @UserInfo('id') currentUserId: number,
@@ -58,7 +58,7 @@ export class CardsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get()
+  @Get('lists/:listId/cards')
   @GetAllSwaggerDecorator()
   async getAllByListId(
     @Param('listId') listId: number,
@@ -73,7 +73,7 @@ export class CardsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
+  @Get('cards/:id')
   @GetByIdSwaggerDecorator()
   async getById(
     @Param('id', ParseIntPipe) id: number,
@@ -86,7 +86,7 @@ export class CardsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
+  @Delete('cards/:id')
   @RemoveSwaggerDecorator()
   async remove(
     @Param('id', ParseIntPipe) id: number,
@@ -98,7 +98,7 @@ export class CardsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
+  @Patch('lists/:listId/cards/:id')
   @UpdateSwaggerDecorator()
   async update(
     @UserInfo('id') currentUserId: number,
