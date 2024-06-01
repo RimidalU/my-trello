@@ -27,26 +27,34 @@ import {
 } from './decorators'
 import { ApiTags } from '@nestjs/swagger'
 import { CommentEntity } from './entities'
+import { CardEntity } from '@src/cards/entities'
 
-@Controller('comments')
+@Controller()
 @ApiTags('Comments routes')
 export class CommentsController {
   constructor(private readonly commentService: CommentsService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post()
+  @Post('cards/:cardId/comments')
   @CreateSwaggerDecorator()
   async create(
     @UserInfo('id') currentUserId: number,
+    @Param('cardId') cardId: number,
     @Body() payload: CreateCommentDto,
   ): Promise<CommentConfirmationResponseDto> {
-    const listId = await this.commentService.create(currentUserId, payload)
+    const card = await this.getCardById(cardId)
+
+    const listId = await this.commentService.create(
+      currentUserId,
+      card,
+      payload,
+    )
 
     return this.buildCommentConfirmationResponse(listId)
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
+  @Get('comments/:id')
   @GetByIdSwaggerDecorator()
   async getById(
     @Param('id', ParseIntPipe) id: number,
@@ -59,7 +67,7 @@ export class CommentsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
+  @Delete('comments/:id')
   @RemoveSwaggerDecorator()
   async remove(
     @Param('id', ParseIntPipe) id: number,
@@ -71,7 +79,7 @@ export class CommentsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
+  @Patch('comments/:id')
   @UpdateSwaggerDecorator()
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -81,6 +89,10 @@ export class CommentsController {
     const listId = await this.commentService.update(id, payload, currentUserId)
 
     return this.buildListConfirmationResponse(listId)
+  }
+
+  private async getCardById(cardId: number): Promise<CardEntity> {
+    return await this.commentService.getCardById(cardId)
   }
 
   private buildListConfirmationResponse(
