@@ -79,7 +79,9 @@ export class ListsController {
     @Param('id', ParseIntPipe) id: number,
     @UserInfo('id') currentUserId: number,
   ): Promise<ListConfirmationResponseDto> {
-    if (id !== currentUserId) {
+    const listInfo = await this.listService.getById(id)
+
+    if (listInfo.owner.id !== currentUserId) {
       throw new NotAcceptableException()
     }
 
