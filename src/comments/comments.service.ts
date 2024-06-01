@@ -30,7 +30,11 @@ export class CommentsService {
     const newComment = new CommentEntity()
     Object.assign(newComment, { ...payload, owner })
 
+    card.comments.push(newComment)
+
     const comment = await this.commentRepository.save(newComment)
+    await this.cardRepository.save(card)
+
     return comment.id
   }
 
