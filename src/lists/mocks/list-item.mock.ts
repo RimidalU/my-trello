@@ -19,3 +19,18 @@ export const newItemInfo = {
   name: listItem.name,
   position: listItem.position,
 }
+
+export const listItemResponse = {
+  itemId: listItem.id,
+  item: {
+    name: listItem.name,
+    position: listItem.position,
+    createdAt: listItem.createdAt,
+  },
+  owner: {
+    id: listItem.owner.id,
+    name: listItem.owner.name,
+    email: listItem.owner.email,
+    createdAt: listItem.owner.createdAt,
+  },
+}
