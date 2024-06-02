@@ -5,6 +5,7 @@ import { ListEntity } from './entities'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { listItem, newItemInfo, owner } from './mocks'
 import { UserEntity } from '@src/users/entities'
+import { ListNotFoundException } from './exceptions'
 
 describe('ListsService', () => {
   let service: ListsService
@@ -25,6 +26,7 @@ describe('ListsService', () => {
             save: jest.fn().mockReturnValue(listItem),
             find: jest.fn().mockReturnValue([listItem]),
             findOneBy: jest.fn().mockReturnValue(listItem),
+            findOne: jest.fn().mockReturnValue(listItem),
             remove: jest.fn().mockReturnValue(listItem),
           },
         },
@@ -82,6 +84,25 @@ describe('ListsService', () => {
         },
         position: 2,
       })
+    })
+  })
+
+  describe('getById method', () => {
+    it('the list with correct id should be returned', async () => {
+      expect(await service.getById(listItem.id)).toEqual(listItem)
+
+      expect(listRepository.findOne).toHaveBeenCalledWith({
+        relations: ['owner'],
+        where: { id: listItem.id },
+      })
+    })
+
+    it('getById list with wrong id should throw an exception', async () => {
+      listRepository.findOne = jest.fn().mockReturnValue(undefined)
+
+      await expect(service.getById(listItem.id)).rejects.toThrow(
+        ListNotFoundException,
+      )
     })
   })
 })
