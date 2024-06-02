@@ -50,4 +50,29 @@ describe('ListsController', () => {
       })
     })
   })
+
+  describe('get all lists method', () => {
+    it('check returned array of lists', async () => {
+      expect(await controller.getAll()).toEqual({
+        lists: [
+          {
+            itemId: listItem.id,
+            item: {
+              name: listItem.name,
+              position: listItem.position,
+              createdAt: listItem.createdAt,
+            },
+            owner: {
+              id: listItem.owner.id,
+              name: listItem.owner.name,
+              email: listItem.owner.email,
+              createdAt: listItem.owner.createdAt,
+            },
+          },
+        ],
+      })
+
+      expect(service.getAll).toHaveBeenCalledWith()
+    })
+  })
 })
