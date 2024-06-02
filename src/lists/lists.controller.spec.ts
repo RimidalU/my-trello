@@ -89,4 +89,24 @@ describe('ListsController', () => {
       expect(service.remove).toHaveBeenCalledWith(listItem.id)
     })
   })
+
+  describe('update list method', () => {
+    it('check returned NotAcceptable Exception', async () => {
+      await expect(
+        controller.update(listItem.id, newItemInfo, currentUserId),
+      ).rejects.toThrow(NotAcceptableException)
+    })
+
+    it('check returned updated list with current id', async () => {
+      expect(
+        await controller.update(listItem.id, newItemInfo, listItem.owner.id),
+      ).toEqual({
+        list: {
+          itemId: listItem.id,
+        },
+      })
+
+      expect(service.update).toHaveBeenCalledWith(listItem.id, newItemInfo)
+    })
+  })
 })
