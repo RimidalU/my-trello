@@ -52,4 +52,18 @@ describe('ListsService', () => {
   it('should bookRepository be defined', () => {
     expect(userRepository).toBeDefined()
   })
+
+  describe('getAll lists method', () => {
+    it('the array of lists should be returned', async () => {
+      expect(await service.getAll()).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            ...listItem,
+          }),
+        ]),
+      )
+
+      expect(listRepository.find).toHaveBeenCalledWith({ relations: ['owner'] })
+    })
+  })
 })
