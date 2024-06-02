@@ -16,11 +16,13 @@ import {
   CommentConfirmationResponseDto,
   CommentItemDto,
   CommentResponseDto,
+  CommentsResponseDto,
   CreateCommentDto,
   UpdateCommentDto,
 } from './dto'
 import {
   CreateSwaggerDecorator,
+  GetAllSwaggerDecorator,
   GetByIdSwaggerDecorator,
   RemoveSwaggerDecorator,
   UpdateSwaggerDecorator,
@@ -89,6 +91,21 @@ export class CommentsController {
     const listId = await this.commentService.update(id, payload, currentUserId)
 
     return this.buildListConfirmationResponse(listId)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('cards/:cardId/comments')
+  @GetAllSwaggerDecorator()
+  async getAllByListId(
+    @Param('cardId') cardId: number,
+  ): Promise<CommentsResponseDto> {
+    const card = await this.getCardById(cardId)
+
+    const comments = await this.commentService.getAllCommentsByCardId(card)
+
+    return {
+      comments: comments.map((comment) => this.buildCommentResponse(comment)),
+    }
   }
 
   private async getCardById(cardId: number): Promise<CardEntity> {
