@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { ListsController } from './lists.controller'
 import { ListsService } from './lists.service'
 import { listItem, listItemResponse, newItemInfo } from './mocks'
+import { NotAcceptableException } from '@nestjs/common/exceptions'
 
 describe('ListsController', () => {
   let controller: ListsController
@@ -68,6 +69,24 @@ describe('ListsController', () => {
       })
 
       expect(service.getById).toHaveBeenCalledWith(listItem.id)
+    })
+  })
+
+  describe('remove list method', () => {
+    it('check returned NotAcceptableException', async () => {
+      await expect(
+        controller.remove(listItem.id, currentUserId),
+      ).rejects.toThrow(NotAcceptableException)
+    })
+
+    it('check returned list id', async () => {
+      expect(await controller.remove(listItem.id, listItem.owner.id)).toEqual({
+        list: {
+          itemId: listItem.id,
+        },
+      })
+
+      expect(service.remove).toHaveBeenCalledWith(listItem.id)
     })
   })
 })
