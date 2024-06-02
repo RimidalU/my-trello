@@ -85,4 +85,8 @@ export class CommentsService {
     }
     return card
   }
+
+  async getAllCommentsByCardId(card: CardEntity): Promise<CommentEntity[]> {
+    return card.comments
+  }
 }
