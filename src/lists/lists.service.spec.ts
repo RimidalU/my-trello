@@ -107,7 +107,7 @@ describe('ListsService', () => {
   })
 
   describe('remove method', () => {
-    it('remove the list with correct id should be returned user id', async () => {
+    it('remove the list with correct id should be returned list id', async () => {
       expect(await service.remove(listItem.id)).toEqual(listItem.id)
 
       expect(await listRepository.findOne).toHaveBeenCalledWith({
@@ -121,6 +121,32 @@ describe('ListsService', () => {
       listRepository.findOne = jest.fn().mockReturnValue(undefined)
 
       await expect(service.remove(listItem.id)).rejects.toThrow(
+        ListNotFoundException,
+      )
+    })
+  })
+
+  describe('update method', () => {
+    it('update the list with correct id should be returned list id', async () => {
+      expect(await service.update(listItem.id, newItemInfo)).toEqual(
+        listItem.id,
+      )
+
+      expect(await listRepository.findOne).toHaveBeenCalledWith({
+        relations: ['owner'],
+        where: { id: listItem.id },
+      })
+
+      expect(listRepository.save).toHaveBeenCalledWith({
+        ...listItem,
+        ...newItemInfo,
+      })
+    })
+
+    it('update list with wrong id should throw an exception', async () => {
+      listRepository.findOne = jest.fn().mockReturnValue(undefined)
+
+      await expect(service.update(listItem.id, newItemInfo)).rejects.toThrow(
         ListNotFoundException,
       )
     })
