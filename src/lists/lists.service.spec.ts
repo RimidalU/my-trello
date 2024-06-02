@@ -3,13 +3,14 @@ import { ListsService } from './lists.service'
 import { Repository } from 'typeorm'
 import { ListEntity } from './entities'
 import { getRepositoryToken } from '@nestjs/typeorm'
-import { listItem, owner } from './mocks'
+import { listItem, newItemInfo, owner } from './mocks'
 import { UserEntity } from '@src/users/entities'
 
 describe('ListsService', () => {
   let service: ListsService
   let listRepository: Repository<ListEntity>
   let userRepository: Repository<UserEntity>
+  const currentUserId = 1
 
   const LIST_REPOSITORY_TOKEN = getRepositoryToken(ListEntity)
   const USER_REPOSITORY_TOKEN = getRepositoryToken(UserEntity)
@@ -64,6 +65,23 @@ describe('ListsService', () => {
       )
 
       expect(listRepository.find).toHaveBeenCalledWith({ relations: ['owner'] })
+    })
+  })
+
+  describe('create list method', () => {
+    it('check the list created', async () => {
+      expect(await service.create(currentUserId, newItemInfo)).toBe(listItem.id)
+      expect(listRepository.save).toHaveBeenCalledWith({
+        name: listItem.name,
+        owner: {
+          createdAt: listItem.owner.createdAt,
+          email: listItem.owner.email,
+          id: listItem.owner.id,
+          name: listItem.owner.name,
+          password: listItem.owner.password,
+        },
+        position: 2,
+      })
     })
   })
 })

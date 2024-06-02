@@ -6,13 +6,15 @@ import { userItem } from '@src/users/mocks'
 export const owner = new UserEntity()
 Object.assign(owner, userItem)
 
+const createDate = new Date('2024-06-02T17:24:55.866Z')
+
 export const listItem: ListEntity = {
   id: 33,
   name: 'List Name',
   position: 2,
   cards: [new CardEntity()],
   owner: owner,
-  createdAt: new Date(),
+  createdAt: createDate,
 }
 
 export const newItemInfo = {
