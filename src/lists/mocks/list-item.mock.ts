@@ -3,7 +3,7 @@ import { ListEntity } from '../entities'
 import { CardEntity } from '@src/cards/entities'
 import { userItem } from '@src/users/mocks'
 
-const owner = new UserEntity()
+export const owner = new UserEntity()
 Object.assign(owner, userItem)
 
 export const listItem: ListEntity = {
