@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotAcceptableException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserEntity } from '@src/users/entities'
 import { Repository } from 'typeorm'
 import { CardEntity } from './entities'
-import { CreateCardDto } from './dto'
-import { ListNotFoundException } from '@src/lists/exceptions'
+import { CreateCardDto, UpdateCardDto } from './dto'
 import { ListEntity } from '@src/lists/entities'
+import { CardNotFoundException } from './exceptions'
 
 @Injectable()
 export class CardsService {
@@ -40,10 +40,62 @@ export class CardsService {
     return list.cards
   }
 
-  async checkList(listId: number): Promise<ListEntity> {
+  async getById(id: number): Promise<CardEntity> {
+    const card = await this.cardRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['owner', 'comments'],
+    })
+    if (!card) {
+      throw new CardNotFoundException(['id', id])
+    }
+    return card
+  }
+
+  async remove(id: number, currentUserId: number): Promise<number> {
+    const entity = await this.getById(id)
+
+    if (entity.owner.id !== currentUserId) {
+      throw new NotAcceptableException()
+    }
+
+    await this.cardRepository.remove(entity)
+    return id
+  }
+
+  async update(
+    id: number,
+    payload: UpdateCardDto,
+    currentUserId: number,
+    list: ListEntity,
+    newList: ListEntity,
+  ): Promise<number> {
+    const entity = await this.getById(id)
+
+    if (entity.owner.id !== currentUserId) {
+      throw new NotAcceptableException()
+    }
+
+    Object.assign(entity, payload)
+
+    list.cards.filter((card) => card.id !== id)
+
+    await this.cardRepository.save(entity)
+    await this.listRepository.save(list)
+
+    if (newList) {
+      newList.cards.push(entity)
+      await this.listRepository.save(newList)
+    }
+
+    return entity.id
+  }
+
+  async getListById(listId: number): Promise<ListEntity> {
     const list = await this.listRepository.findOneBy({ id: listId })
     if (!list) {
-      throw new ListNotFoundException(['id', listId])
+      throw new CardNotFoundException(['id', listId])
     }
     return list
   }

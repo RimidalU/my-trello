@@ -1,4 +1,4 @@
-import { Injectable, NotAcceptableException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
@@ -53,16 +53,8 @@ export class ListsService {
     return id
   }
 
-  async update(
-    id: number,
-    payload: UpdateListDto,
-    currentUserId: number,
-  ): Promise<number> {
+  async update(id: number, payload: UpdateListDto): Promise<number> {
     const entity = await this.getById(id)
-
-    if (entity.owner.id !== currentUserId) {
-      throw new NotAcceptableException()
-    }
 
     Object.assign(entity, payload)
 

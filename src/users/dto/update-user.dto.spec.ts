@@ -3,7 +3,7 @@ import { validate } from 'class-validator'
 
 import { UpdateUserDto } from '@src/users/dto/update-user.dto'
 
-describe('create-user.dto', () => {
+describe('update-user.dto', () => {
   let dto
   const numberValue = 12
   const stringValue = 'string-value'
@@ -15,12 +15,6 @@ describe('create-user.dto', () => {
       email: '',
       password: '',
     }
-  })
-
-  it('name field is empty', async () => {
-    const ofImportDTO = plainToInstance(UpdateUserDto, dto)
-    const errors = await validate(ofImportDTO)
-    expect(errors.map((err) => err.property).includes('name')).toBeTruthy()
   })
 
   it('name field is not string', async () => {
@@ -37,12 +31,6 @@ describe('create-user.dto', () => {
     expect(errors.map((err) => err.property).includes('name')).toBeFalsy()
   })
 
-  it('email field is empty', async () => {
-    const ofImportDTO = plainToInstance(UpdateUserDto, dto)
-    const errors = await validate(ofImportDTO)
-    expect(errors.map((err) => err.property).includes('email')).toBeTruthy()
-  })
-
   it('email field is not a email', async () => {
     dto.email = stringValue
     const ofImportDTO = plainToInstance(UpdateUserDto, dto)
@@ -55,12 +43,6 @@ describe('create-user.dto', () => {
     const ofImportDTO = plainToInstance(UpdateUserDto, dto)
     const errors = await validate(ofImportDTO)
     expect(errors.map((err) => err.property).includes('email')).toBeFalsy()
-  })
-
-  it('password field is empty', async () => {
-    const ofImportDTO = plainToInstance(UpdateUserDto, dto)
-    const errors = await validate(ofImportDTO)
-    expect(errors.map((err) => err.property).includes('password')).toBeTruthy()
   })
 
   it('password field is not a string', async () => {

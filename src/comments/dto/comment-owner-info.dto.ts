@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger'
 export class CommentOwnerInfoDTO {
   @ApiProperty({
     example: '11',
-    description: 'List owner id',
+    description: 'Comment id',
   })
   readonly id: number
 

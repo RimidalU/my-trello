@@ -79,7 +79,9 @@ export class ListsController {
     @Param('id', ParseIntPipe) id: number,
     @UserInfo('id') currentUserId: number,
   ): Promise<ListConfirmationResponseDto> {
-    if (id !== currentUserId) {
+    const listInfo = await this.listService.getById(id)
+
+    if (listInfo.owner.id !== currentUserId) {
       throw new NotAcceptableException()
     }
 
@@ -96,7 +98,13 @@ export class ListsController {
     @Body() payload: UpdateListDto,
     @UserInfo('id') currentUserId: number,
   ): Promise<ListConfirmationResponseDto> {
-    const listId = await this.listService.update(id, payload, currentUserId)
+    const listInfo = await this.listService.getById(id)
+
+    if (listInfo.owner.id !== currentUserId) {
+      throw new NotAcceptableException()
+    }
+
+    const listId = await this.listService.update(id, payload)
 
     return this.buildListConfirmationResponse(listId)
   }

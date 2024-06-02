@@ -1,18 +1,18 @@
-import { IsEmail, IsOptional, IsString } from 'class-validator'
-
 import { ApiProperty } from '@nestjs/swagger'
 
-export class UpdateUserDto {
-  @IsString()
-  @IsOptional()
+export class CardOwnerInfoDTO {
+  @ApiProperty({
+    example: '11',
+    description: 'List owner id',
+  })
+  readonly id: number
+
   @ApiProperty({
     example: 'User Example',
     description: 'User Name',
   })
   readonly name: string
 
-  @IsEmail()
-  @IsOptional()
   @ApiProperty({
     uniqueItems: true,
     example: 'example@email.com',
@@ -20,11 +20,9 @@ export class UpdateUserDto {
   })
   readonly email: string
 
-  @IsString()
-  @IsOptional()
   @ApiProperty({
-    example: 'example#Password91',
-    description: 'Strong Password',
+    example: '20.20.2020',
+    description: 'List created At',
   })
-  readonly password?: string
+  readonly createdAt: Date
 }
