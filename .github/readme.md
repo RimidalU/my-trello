@@ -8,7 +8,7 @@
 ![license](https://img.shields.io/github/license/RimidalU/my-trello)
 ![GitHub repo size](https://img.shields.io/github/repo-size/RimidalU/my-trello)
 
-<!-- [![Link to My Trello Server](https://img.shields.io/badge/Visit_the_My-Trello_server-Click_Here-black?style=plastic&logo=link&logoColor=black&labelColor=white&color=black&link=https://book-swap-0ph3.onrender.com/docs)](https://book-swap-0ph3.onrender.com/docs) -->
+[![Link to My Trello Server](https://img.shields.io/badge/Visit_the_My_Trello_server-Click_Here-black?style=plastic&logo=link&logoColor=black&labelColor=white&color=black&link=https://my-trello-rulj.onrender.com/docs)](https://my-trello-rulj.onrender.com/docs)
 
 ---
 
@@ -30,7 +30,7 @@
 ![Jest](https://img.shields.io/badge/-Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
 ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
 ![Passport](https://img.shields.io/badge/Passport-34E27A.svg?style=for-the-badge&logo=Passport&logoColor=white)
-![Typeorm](https://img.shields.io/badge/-typeorm-E83524?style=for-the-badge&&logoColor=white)
+![TypeOrm](https://img.shields.io/badge/-typeorm-E83524?style=for-the-badge&&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1.svg?style=for-the-badge&logo=PostgreSQL&logoColor=white)
 ![Zod](https://img.shields.io/badge/Zod-3E67B1.svg?style=for-the-badge&logo=Zod&logoColor=white)
 ![Docker](https://img.shields.io/badge/-Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
@@ -40,6 +40,8 @@
 
 ## Description
 
+Trello clone with custom features.
+
 #### ERD iteration-1:
 
 <details>
@@ -47,7 +49,6 @@
 [![Link ERD](./assets/iteration-1.png)](https://dbdiagram.io/d/my-trello-1-664e2370f84ecd1d22e1c216)
 
 </details>
-
 
 - [ERD File](./iteration-1.dbml)
 
@@ -69,6 +70,7 @@ Or run locally:
 ## Features
 
 - Registration, authorization of users.
+- Users, Cards, Lists and Comments CRUD.
 
 ## How To Use
 
@@ -86,7 +88,7 @@ Project is: _in progress_
 
 To do:
 
-- [ ] Implement logic.
+- [ ] Implement iteration-2.
 - [ ] Create frontend.
 - [ ] ...
 
