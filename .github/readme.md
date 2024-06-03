@@ -58,7 +58,7 @@ Trello clone with custom features.
 
 ## Project setup
 
- <!-- ***The swagger of the project's backend is [here](https://book-swap-0ph3.onrender.com/docs).*** -->
+**_The swagger of the project's backend is [here](https://my-trello-rulj.onrender.com/docs)._**
 
 Or run locally:
 
